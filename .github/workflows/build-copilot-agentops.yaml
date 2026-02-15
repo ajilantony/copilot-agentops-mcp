@@ -1,0 +1,25 @@
+name: Build MCP Server - Copilot AgentOps
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *' # Every hour at minute 0
+
+jobs:
+  build-and-push-image-stdio:
+    uses: ./.github/workflows/build-container.yaml
+
+    strategy:
+      matrix:
+        image_name: [ 'copilot-agentops' ]
+
+    permissions:
+      contents: write
+      packages: write
+      attestations: write
+      id-token: write
+
+    with:
+      image_name: ${{ matrix.image_name }}
+      force: false
+    secrets: inherit

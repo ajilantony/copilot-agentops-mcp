@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "copilot-agentops": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "ajilantony/copilot-agentops:latest"
+      ]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-﻿{
+{
   "instructions": [
     {
       "filename": "a11y.instructions.md",
@@ -2636,7 +2636,7 @@
       "agent": "agent"
     },
     {
-      "filename": "suggest-awesome-github-copilot-agents.prompt.md",
+      "filename": "suggest-github-copilot-agents.prompt.md",
       "agent": "agent",
       "description": "Suggest relevant GitHub Copilot Custom Agents files from the copilot-agentops repository based on current repository context and chat history, avoiding duplicates with existing custom agents in this repository, and identifying outdated agents that need updates.",
       "tools": [
@@ -2653,7 +2653,7 @@
       ]
     },
     {
-      "filename": "suggest-awesome-github-copilot-collections.prompt.md",
+      "filename": "suggest-github-copilot-collections.prompt.md",
       "agent": "agent",
       "description": "Suggest relevant GitHub Copilot collections from the copilot-agentops repository based on current repository context and chat history, providing automatic download and installation of collection assets, and identifying outdated collection assets that need updates.",
       "tools": [
@@ -2672,7 +2672,7 @@
       ]
     },
     {
-      "filename": "suggest-awesome-github-copilot-instructions.prompt.md",
+      "filename": "suggest-github-copilot-instructions.prompt.md",
       "agent": "agent",
       "description": "Suggest relevant GitHub Copilot instruction files from the copilot-agentops repository based on current repository context and chat history, avoiding duplicates with existing instructions in this repository, and identifying outdated instructions that need updates.",
       "tools": [
@@ -2691,7 +2691,7 @@
       ]
     },
     {
-      "filename": "suggest-awesome-github-copilot-prompts.prompt.md",
+      "filename": "suggest-github-copilot-prompts.prompt.md",
       "agent": "agent",
       "description": "Suggest relevant GitHub Copilot prompt files from the copilot-agentops repository based on current repository context and chat history, avoiding duplicates with existing prompts in this repository, and identifying outdated prompts that need updates.",
       "tools": [
@@ -2951,42 +2951,6 @@
   ],
   "collections": [
     {
-      "filename": "awesome-copilot.collection.yml",
-      "id": "awesome-copilot",
-      "name": "Copilot AgentOps",
-      "description": "Meta prompts that help you discover and generate curated GitHub Copilot agents, collections, instructions, prompts, and skills.",
-      "tags": [
-        "github-copilot",
-        "discovery",
-        "meta",
-        "prompt-engineering",
-        "agents"
-      ],
-      "items": [
-        {
-          "path": "prompts/suggest-awesome-github-copilot-collections.prompt.md",
-          "kind": "prompt"
-        },
-        {
-          "path": "prompts/suggest-awesome-github-copilot-instructions.prompt.md",
-          "kind": "prompt"
-        },
-        {
-          "path": "prompts/suggest-awesome-github-copilot-prompts.prompt.md",
-          "kind": "prompt"
-        },
-        {
-          "path": "prompts/suggest-awesome-github-copilot-agents.prompt.md",
-          "kind": "prompt"
-        },
-        {
-          "path": "agents/meta-agentic-project-scaffold.agent.md",
-          "kind": "agent"
-        }
-      ],
-      "display": {}
-    },
-    {
       "filename": "azure-cloud-development.collection.yml",
       "id": "azure-cloud-development",
       "name": "Azure & Cloud Development",
@@ -3162,6 +3126,42 @@
           "path": "prompts/refactor-plan.prompt.md",
           "kind": "prompt",
           "usage": "optional\n\nUse for multi-file refactors. Produces a phased plan with\nverification steps and rollback procedures."
+        }
+      ],
+      "display": {}
+    },
+    {
+      "filename": "copilot-agentops.collection.yml",
+      "id": "copilot-agentops",
+      "name": "Copilot AgentOps",
+      "description": "Meta prompts that help you discover and generate curated GitHub Copilot agents, collections, instructions, prompts, and skills.",
+      "tags": [
+        "github-copilot",
+        "discovery",
+        "meta",
+        "prompt-engineering",
+        "agents"
+      ],
+      "items": [
+        {
+          "path": "prompts/suggest-github-copilot-collections.prompt.md",
+          "kind": "prompt"
+        },
+        {
+          "path": "prompts/suggest-github-copilot-instructions.prompt.md",
+          "kind": "prompt"
+        },
+        {
+          "path": "prompts/suggest-github-copilot-prompts.prompt.md",
+          "kind": "prompt"
+        },
+        {
+          "path": "prompts/suggest-github-copilot-agents.prompt.md",
+          "kind": "prompt"
+        },
+        {
+          "path": "agents/meta-agentic-project-scaffold.agent.md",
+          "kind": "agent"
         }
       ],
       "display": {}

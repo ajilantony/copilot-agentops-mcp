@@ -3,13 +3,13 @@
 Purpose: Make agents instantly productive. Follow ONLY patterns proven in this repo; don’t invent abstractions.
 
 ## Architecture & Runtime
-- Mono-repo of independent Hybrid MCP servers: `copilot-agentops/`, `markdown-to-html/`, `todo-list/`, `outlook-email/` + shared lib `shared/McpSamples.Shared/`.
+- Mono-repo of independent Hybrid MCP servers: `hybridapp/`, `markdown-to-html/`, `todo-list/`, `outlook-email/` + shared lib `shared/CopilotAgentOpsMcp.Shared/`.
 - Hybrid pattern: same `Program.cs` can run STDIO (default) or stateless HTTP when `-- http` (or env `UseHttp=true`). Selection via `AppSettings.UseStreamableHttp(...)`; final wiring through `BuildApp(useStreamableHttp)`.
 - Discovery: Tools / Prompts / Resources auto-registered by assembly scan (`With*FromAssembly`). New public attributed types in the entry assembly just work—avoid manual registration.
 - HTTP mode: single POST `/mcp`; some samples add dual OpenAPI docs (swagger 2.0 + openapi 3.0) via `McpDocumentTransformer<T>`.
 
 ## Sample-Specific Nuance
-- copilot-agentops: Large `metadata.json`; reuse `IMetadataService` (don’t repeatedly load whole file). Tools: search & load instructions.
+- hybridapp: Large `metadata.json`; reuse `IMetadataService` (don't repeatedly load whole file). Tools: search & load instructions.
 - markdown-to-html: Extra switches `-tc`, `-p`, `--tags` only parsed AFTER `--` delimiter.
 - todo-list: In‑memory SQLite kept alive by one singleton `SqliteConnection`; use EF Core set-based ops (`ExecuteUpdateAsync/ExecuteDeleteAsync`).
 - outlook-email: Supports auth parameters (`--tenant-id/-t`, `--client-id/-c`, `--client-secret/-s`) or user secrets; can also host via Azure Functions (see sample README). Only add auth handling inside this sample—do not leak to shared.
@@ -28,7 +28,7 @@ Purpose: Make agents instantly productive. Follow ONLY patterns proven in this r
 ## Safe Editing Rules
 - Don’t change signatures of shared extension methods (`AddAppSettings<T>`, `BuildApp`) unless updating EVERY sample in one PR.
 - Don’t introduce persistence in other samples without isolating it; never move sample-only concerns into `shared` casually.
-- When touching `copilot-agentops` metadata handling, avoid O(n) reload loops—stream or cache.
+- When touching `hybridapp` metadata handling, avoid O(n) reload loops—stream or cache.
 
 ## Frequent Pitfalls (avoid silently breaking)
 - Missing `--` causes custom flags ignored.
@@ -44,7 +44,7 @@ Purpose: Make agents instantly productive. Follow ONLY patterns proven in this r
 - Deploy (per sample): `azd auth login` then `azd up` inside sample folder, then read FQDN via `azd env get-value AZURE_RESOURCE_<...>_FQDN`.
 
 ## Adding a New Sample (Checklist)
-1. Copy structure from an existing sample; reference `McpSamples.Shared`.
+1. Copy structure from an existing sample; reference `CopilotAgentOpsMcp.Shared`.
 2. Implement `Program.cs` with same pattern (parse settings -> add services -> `BuildApp`).
 3. Add `Dockerfile.<name>` + `.vscode/mcp.*.json` variants; expose 8080.
 4. Update root README table with install badges.

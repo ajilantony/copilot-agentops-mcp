@@ -121,14 +121,14 @@ Copilot AgentOps implements a hybrid MCP server architecture:
 ### 1. Local Development (STDIO)
 
 ```bash
-cd copilot-agentops
-dotnet run --project ./src/McpSamples.CopilotAgentOps.HybridApp
+cd hybridapp
+dotnet run --project ./src/CopilotAgentOpsMcp.HybridApp
 ```
 
 ### 2. Local HTTP Server
 
 ```bash
-dotnet run --project ./src/McpSamples.CopilotAgentOps.HybridApp -- --http
+dotnet run --project ./src/CopilotAgentOpsMcp.HybridApp -- --http
 # Server runs at http://localhost:5250
 ```
 
@@ -149,7 +149,7 @@ docker run -i --rm -p 8080:8080 ajilantony/copilot-agentops:latest --http
 ### 5. Azure Container Apps
 
 ```bash
-cd copilot-agentops
+cd hybridapp
 azd auth login
 azd up
 ```
@@ -166,16 +166,16 @@ Configure the MCP server by copying the appropriate configuration to `.vscode/mc
 
 ```bash
 # For local STDIO mode
-cp copilot-agentops/.vscode/mcp.stdio.local.json .vscode/mcp.json
+cp hybridapp/.vscode/mcp.stdio.local.json .vscode/mcp.json
 
 # For local HTTP mode
-cp copilot-agentops/.vscode/mcp.http.local.json .vscode/mcp.json
+cp hybridapp/.vscode/mcp.http.local.json .vscode/mcp.json
 
 # For containerized mode
-cp copilot-agentops/.vscode/mcp.stdio.container.json .vscode/mcp.json
+cp hybridapp/.vscode/mcp.stdio.container.json .vscode/mcp.json
 
 # For Azure deployment
-cp copilot-agentops/.vscode/mcp.http.remote.json .vscode/mcp.json
+cp hybridapp/.vscode/mcp.http.remote.json .vscode/mcp.json
 ```
 
 Then restart VS Code or reload the MCP server from the Command Palette (`MCP: List Servers`).
@@ -190,9 +190,9 @@ Then restart VS Code or reload the MCP server from the Command Palette (`MCP: Li
 ## Project Structure
 
 ```
-copilot-agentops/
+hybridapp/
 ├── src/
-│   └── McpSamples.CopilotAgentOps.HybridApp/
+│   └── CopilotAgentOpsMcp.HybridApp/
 │       ├── Program.cs                      # Application entry point
 │       ├── Configurations/                 # App settings
 │       ├── Models/                         # Data models
@@ -214,7 +214,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 - [Model Context Protocol Specification](https://spec.modelcontextprotocol.io/)
 - [Copilot AgentOps Repository](https://github.com/ajilantony/copilot-agentops)
 - [.NET MCP SDK Documentation](https://learn.microsoft.com/dotnet/ai/mcp-dotnet-sdk)
-- [Full Documentation](copilot-agentops/README.md)
+- [Full Documentation](hybridapp/README.md)
 
 ## License
 
@@ -222,7 +222,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 📖 [Documentation](copilot-agentops/README.md)
+- 📖 [Documentation](hybridapp/README.md)
 - 🐛 [Issue Tracker](https://github.com/microsoft/mcp-dotnet-samples/issues)
 - 💬 [Discussions](https://github.com/microsoft/mcp-dotnet-samples/discussions)
 - 📧 [Support](SUPPORT.md)

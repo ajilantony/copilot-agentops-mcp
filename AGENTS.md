@@ -15,9 +15,9 @@ mcp-dotnet-samples/
 │   ├── copilot-instructions.md # GitHub Copilot coding standards
 │   └── templates/             # Issue and PR templates
 ├── shared/                    # Common shared libraries
-│   └── McpSamples.Shared/     # Shared MCP implementation utilities
-├── copilot-agentops/          # GitHub Copilot integration sample
-│   ├── src/McpSamples.CopilotAgentOps.HybridApp/
+│   └── CopilotAgentOpsMcp.Shared/     # Shared MCP implementation utilities
+├── hybridapp/                 # GitHub Copilot integration sample
+│   ├── src/CopilotAgentOpsMcp.HybridApp/
 │   ├── infra/                 # Azure Bicep templates
 │   └── .vscode/              # VS Code MCP configuration
 ├── markdown-to-html/          # Markdown conversion sample

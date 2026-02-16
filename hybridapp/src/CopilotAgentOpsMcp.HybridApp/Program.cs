@@ -12,7 +12,7 @@ IHostApplicationBuilder builder = useStreamableHttp
                                 ? WebApplication.CreateBuilder(args)
                                 : Host.CreateApplicationBuilder(args);
 
-builder.Services.AddAppSettings<CopilotAgentOpsAppSettings>(builder.Configuration, args);
+builder.Services.AddAppSettings<CopilotAgentOpsMcpAppSettings>(builder.Configuration, args);
 
 var options = new JsonSerializerOptions
 {
@@ -30,12 +30,12 @@ if (useStreamableHttp == true)
     builder.Services.AddOpenApi("swagger", o =>
     {
         o.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
-        o.AddDocumentTransformer<McpDocumentTransformer<CopilotAgentOpsAppSettings>>();
+        o.AddDocumentTransformer<McpDocumentTransformer<CopilotAgentOpsMcpAppSettings>>();
     });
     builder.Services.AddOpenApi("openapi", o =>
     {
         o.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0;
-        o.AddDocumentTransformer<McpDocumentTransformer<CopilotAgentOpsAppSettings>>();
+        o.AddDocumentTransformer<McpDocumentTransformer<CopilotAgentOpsMcpAppSettings>>();
     });
 }
 

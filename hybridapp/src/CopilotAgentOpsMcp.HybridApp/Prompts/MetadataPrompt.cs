@@ -15,6 +15,14 @@ public interface IMetadataPrompt
     /// <param name="keyword">The keyword to search for.</param>
     /// <returns>A formatted search prompt.</returns>
     string GetSearchPrompt(string keyword);
+
+    /// <summary>
+    /// Gets a prompt for the install workflow.
+    /// </summary>
+    /// <param name="artifactType">The type of artifact (instruction, prompt, agent, chatmode, or 'any').</param>
+    /// <param name="keyword">The keyword to search for.</param>
+    /// <returns>A formatted install workflow prompt.</returns>
+    string GetInstallWorkflowPrompt(string artifactType, string keyword);
 }
 
 /// <summary>
@@ -51,9 +59,8 @@ public class MetadataPrompt : IMetadataPrompt
 
            ✅ indicates that the item already exists in this repository, while ❌ indicates that it does not.
 
-        1. If any item doesn't exist in the repository, ask which item the user wants to save.
-        1. If the user wants to save it, save the item in the appropriate directory (`.github/chatmodes`, `.github/instructions`, `.github/prompts`, or `.github/agents`) 
-           using the mode and filename, with NO modification.
+        1. If any item doesn't exist in the repository, ask which item the user wants to install.
+        1. If the user wants to install it, use the install_artifact tool with the appropriate mode and filename to save to .github/[mode]/ directory.
         1. Include a search for Collections, which are made up of multiple chatmodes, instructions, prompts, and agents, but contain a name, description and tags.
         1. If there are any that match, provide a summary of the collection, including its name, description, tags, and the items it contains.
         1. Do NOT automatically install or save any items. Wait for explicit user confirmation.
@@ -79,6 +86,77 @@ public class MetadataPrompt : IMetadataPrompt
         - A breakdown of items grouped by kind (chat-mode, instruction, prompt, agent) with filenames
 
         Do NOT automatically install or save any items. Wait for explicit user confirmation.
+        """;
+    }
+
+    /// <inheritdoc />
+    [McpServerPrompt(Name = "install_workflow", Title = "Workflow for installing artifacts by search")]
+    [Description("Guides the AI to search and install artifacts when user expresses install intent like 'Install instruction for dotnet'.")]
+    public string GetInstallWorkflowPrompt(
+        [Description("Type of artifact: instruction, prompt, agent, chatmode, or 'any' for all types")] string artifactType,
+        [Description("Keyword to search for relevant artifacts")] string keyword)
+    {
+        return $"""
+        User wants to install {artifactType} related to "{keyword}". Follow this workflow:
+
+        **Step 1: Search for artifacts**
+        - Use the `search_instructions` tool with keyword: `{keyword}`
+        - This will return matching chatmodes, instructions, prompts, and agents
+
+        **Step 2: Filter by type (if specified)**
+        - If artifactType is "{artifactType}" (not "any"), focus on that type
+        - Otherwise, show all relevant matches
+
+        **Step 3: Check for existing files**
+        - Scan the local `.github/` directory for existing artifacts:
+          - `.github/chatmodes/` for chatmodes
+          - `.github/instructions/` for instructions
+          - `.github/prompts/` for prompts
+          - `.github/agents/` for agents
+
+        **Step 4: Present results in a table**
+        Format results as a table with match relevance:
+
+        | Match | Type         | Filename                        | Title              | Description          | Status          |
+        |-------|--------------|----------------------------------|-------------------|----------------------|-----------------|
+        | ⭐⭐⭐ | instructions | dotnet-best-practices.instruction.md | .NET Best Practices | Coding standards... | Not installed |
+        | ⭐⭐   | prompts      | code-review.prompt.md            | Code Review       | Review checklist... | Already exists  |
+
+        Match indicators:
+        - ⭐⭐⭐ = Highly relevant (exact keyword match in title)
+        - ⭐⭐ = Relevant (keyword in description)
+        - ⭐ = Somewhat relevant (related terms)
+
+        **Step 5: Make recommendation**
+        - If only 1 result: "Found a perfect match! Would you like to install it?"
+        - If clear best match (⭐⭐⭐): "The best match is [filename]. Would you like to install it?"
+        - If multiple good matches: "Found [N] matches. Which one would you like to install?" (show table)
+        - If no matches: "No {artifactType} found for '{keyword}'. Try a different search term."
+
+        **Step 6: Install upon confirmation**
+        Once user confirms which artifact to install, use the `install_artifact` tool:
+        - **mode**: Convert type to enum (Instructions, Prompts, Agents, or ChatModes)
+        - **filename**: The exact filename from search results
+        - **targetRepoRoot**: ".github" (default)
+
+        Example call:
+        ```
+        install_artifact(
+          mode: Instructions,
+          filename: "dotnet-best-practices.instruction.md",
+          targetRepoRoot: ".github"
+        )
+        ```
+
+        **Step 7: Confirm installation**
+        After successful installation, report:
+        "✅ Installed to: [relative path, e.g., .github/instructions/dotnet-best-practices.instruction.md]"
+
+        **Important notes:**
+        - Do NOT install without user confirmation
+        - Show the table even if there's only one match
+        - If artifact already exists, ask if user wants to overwrite
+        - Handle errors gracefully with helpful messages
         """;
     }
 }

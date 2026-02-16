@@ -39,6 +39,15 @@ public interface IMetadataTool
     /// <param name="id">Collection id</param>
     /// <returns>Returns the collection as an object or error message as string</returns>
     Task<object> LoadCollectionAsync(string id);
+
+    /// <summary>
+    /// Installs an artifact from the copilot-agentops repository to the local workspace.
+    /// </summary>
+    /// <param name="mode">The artifact type (instructions, prompts, agents, chatmodes)</param>
+    /// <param name="filename">The filename of the artifact</param>
+    /// <param name="targetRepoRoot">Optional target root directory (default: ".github"), or empty for workspace root</param>
+    /// <returns>The installed file path</returns>
+    Task<string> InstallArtifactAsync(InstructionMode mode, string filename, string? targetRepoRoot = null);
 }
 
 /// <summary>
@@ -143,6 +152,46 @@ public class MetadataTool(IMetadataService service, ILogger<MetadataTool> logger
         {
             logger.LogError(ex, "Error occurred while loading collection {Id}.", id);
             return new { Error = ex.Message };
+        }
+    }
+
+    /// <inheritdoc />
+    [McpServerTool(Name = "install_artifact", Title = "Install artifact to workspace")]
+    [Description("Downloads and installs an artifact (instruction, prompt, agent, or chatmode) from the copilot-agentops repository to the local workspace.")]
+    public async Task<string> InstallArtifactAsync(
+        [Description("The artifact type (Instructions, Prompts, Agents, ChatModes)")] InstructionMode mode,
+        [Description("The filename of the artifact to install")] string filename,
+        [Description("Target root directory (default: '.github'), or empty for workspace root")] string? targetRepoRoot = null)
+    {
+        try
+        {
+            if (mode == InstructionMode.Undefined)
+            {
+                throw new ArgumentException("Artifact mode must be defined.", nameof(mode));
+            }
+
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                throw new ArgumentException("Filename cannot be null or empty.", nameof(filename));
+            }
+
+            // Convert mode to directory name
+            var directory = mode.ToString().ToLowerInvariant();
+
+            // Use ".github" as default if targetRepoRoot is null
+            var targetRoot = targetRepoRoot ?? ".github";
+
+            // Install the artifact
+            var installedPath = await service.InstallArtifactAsync(directory, filename, targetRoot).ConfigureAwait(false);
+
+            logger.LogInformation("Successfully installed artifact {Filename} to {InstalledPath}", filename, installedPath);
+
+            return installedPath;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error occurred while installing artifact with mode {Mode} and filename {Filename}.", mode, filename);
+            throw new InvalidOperationException($"Failed to install artifact: {ex.Message}", ex);
         }
     }
 }

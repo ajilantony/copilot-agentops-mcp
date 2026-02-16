@@ -106,6 +106,45 @@ public class MetadataService(HttpClient http, JsonSerializerOptions options, ILo
         return collection;
     }
 
+    /// <inheritdoc />
+    public async Task<string> InstallArtifactAsync(string directory, string filename, string? targetRepoRoot = null, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(directory))
+        {
+            throw new ArgumentException("Directory cannot be null or empty", nameof(directory));
+        }
+
+        if (string.IsNullOrWhiteSpace(filename))
+        {
+            throw new ArgumentException("Filename cannot be null or empty", nameof(filename));
+        }
+
+        // Download the artifact content
+        var content = await LoadAsync(directory, filename, cancellationToken).ConfigureAwait(false);
+
+        // Determine target directory
+        var baseDirectory = string.IsNullOrWhiteSpace(targetRepoRoot)
+            ? Directory.GetCurrentDirectory()
+            : Path.Combine(Directory.GetCurrentDirectory(), targetRepoRoot);
+
+        var targetDirectory = Path.Combine(baseDirectory, directory);
+
+        // Create directory if it doesn't exist
+        Directory.CreateDirectory(targetDirectory);
+
+        // Determine target file path
+        var targetFilePath = Path.Combine(targetDirectory, filename);
+
+        // Write the file
+        await File.WriteAllTextAsync(targetFilePath, content, cancellationToken).ConfigureAwait(false);
+
+        logger.LogInformation("Installed artifact {Filename} to {TargetPath}", filename, targetFilePath);
+
+        // Return relative path from current directory
+        var relativePath = Path.GetRelativePath(Directory.GetCurrentDirectory(), targetFilePath);
+        return relativePath;
+    }
+
     private async Task<Metadata> GetMetadataAsync(CancellationToken cancellationToken)
     {
         if (_cachedMetadata != null)

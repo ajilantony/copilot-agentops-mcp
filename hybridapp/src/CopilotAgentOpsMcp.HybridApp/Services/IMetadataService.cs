@@ -31,4 +31,14 @@ public interface IMetadataService
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Returns the <see cref="Models.Collection"/> or null if not found</returns>
     Task<Collection?> GetCollectionAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Installs an artifact from the copilot-agentops repository to the local workspace
+    /// </summary>
+    /// <param name="directory">The mode directory (chatmodes, instructions, prompts, or agents)</param>
+    /// <param name="filename">The filename to install</param>
+    /// <param name="targetRepoRoot">Optional target root directory (e.g., ".github"), or null for workspace root</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Returns the relative path of the installed file</returns>
+    Task<string> InstallArtifactAsync(string directory, string filename, string? targetRepoRoot = null, CancellationToken cancellationToken = default);
 }

@@ -1,7 +1,5 @@
 ﻿# Copilot AgentOps MCP Server
 
-[![Build Status](https://github.com/microsoft/mcp-dotnet-samples/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/mcp-dotnet-samples/actions/workflows/build.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Introduction
 
@@ -205,27 +203,12 @@ hybridapp/
 └── README.md                               # Sample documentation
 ```
 
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
 ## Resources
 
 - [Model Context Protocol Specification](https://spec.modelcontextprotocol.io/)
 - [Copilot AgentOps Repository](https://github.com/ajilantony/copilot-agentops)
 - [.NET MCP SDK Documentation](https://learn.microsoft.com/dotnet/ai/mcp-dotnet-sdk)
 - [Full Documentation](hybridapp/README.md)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-- 📖 [Documentation](hybridapp/README.md)
-- 🐛 [Issue Tracker](https://github.com/microsoft/mcp-dotnet-samples/issues)
-- 💬 [Discussions](https://github.com/microsoft/mcp-dotnet-samples/discussions)
-- 📧 [Support](SUPPORT.md)
 
 ---
 
